@@ -1,56 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Sparkles, Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Film, Clock, Heart } from 'lucide-react';
+import React, { useState } from 'react';
+import { Sparkles, Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Film, Clock, Heart, Maximize } from 'lucide-react';
 import { memoryChapters } from '../data/memories';
 import { MemoryChapter } from '../types';
 
 export default function MemoryRoom() {
   const [currentChapterIdx, setCurrentChapterIdx] = useState(0);
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
-  const [progressSeconds, setProgressSeconds] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
 
   const currentChapter: MemoryChapter = memoryChapters[currentChapterIdx] || memoryChapters[0];
 
-  // 5-minute video timeline simulation (300 seconds total)
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    if (isPlayingVideo) {
-      interval = setInterval(() => {
-        setProgressSeconds((prev) => {
-          if (prev >= 300) {
-            setIsPlayingVideo(false);
-            return 300;
-          }
-          const next = prev + 1;
-          const nextChap = memoryChapters.findIndex(
-            (c) => next >= c.startTime && next < c.endTime
-          );
-          if (nextChap !== -1 && nextChap !== currentChapterIdx) {
-            setCurrentChapterIdx(nextChap);
-          }
-          return next;
-        });
-      }, 1000);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isPlayingVideo, currentChapterIdx]);
-
   const handleSelectChapter = (idx: number) => {
     setCurrentChapterIdx(idx);
-    setProgressSeconds(memoryChapters[idx].startTime);
     setIsPlayingVideo(true);
   };
 
   const togglePlay = () => {
     setIsPlayingVideo(!isPlayingVideo);
-  };
-
-  const formatTime = (secs: number) => {
-    const mins = Math.floor(secs / 60);
-    const remSecs = secs % 60;
-    return `${mins}:${remSecs < 10 ? '0' : ''}${remSecs}`;
   };
 
   return (
@@ -94,48 +60,27 @@ export default function MemoryRoom() {
               <div className="relative aspect-video rounded-2xl overflow-hidden bg-black border border-purple-900/60 flex flex-col justify-between">
                 {isPlayingVideo ? (
                   <div className="relative w-full h-full">
-                    {/* Video Visual Layer */}
-                    <img
-                      src={currentChapter.thumbnail}
-                      alt={currentChapter.chapterTitle}
-                      className="w-full h-full object-cover filter contrast-[1.1] brightness-[0.9] animate-pulse-glow"
+                    {/* Official YouTube Embed Player for Real Video Playback */}
+                    <iframe
+                      src={`${currentChapter.videoEmbedUrl}&mute=${isMuted ? 1 : 0}`}
+                      title={currentChapter.chapterTitle}
+                      className="w-full h-full border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
                     />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-
-                    {/* Chapter Pill */}
-                    <div className="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-black/70 px-3 py-1 rounded-full border border-purple-500/40 backdrop-blur-md">
-                      <Film className="w-3.5 h-3.5 text-purple-400" />
-                      <span className="text-[11px] font-mono text-purple-200">
-                        {currentChapter.timestamp}
-                      </span>
-                    </div>
-
-                    {/* Subtitle / Milestone Banner */}
-                    <div className="absolute bottom-16 left-4 right-4 z-20">
-                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-purple-900/80 border border-purple-400/40 text-purple-300">
-                        {currentChapter.milestone}
-                      </span>
-                      <h4 className="font-cinzel text-base sm:text-xl font-bold text-white mt-1 drop-shadow-md">
-                        {currentChapter.chapterTitle}
-                      </h4>
-                      <p className="font-cormorant italic text-xs sm:text-sm text-purple-200 mt-0.5">
-                        "{currentChapter.quote}"
-                      </p>
-                    </div>
                   </div>
                 ) : (
-                  /* TV Standby Screen */
+                  /* TV Standby Screen with Milestone Banner */
                   <div className="relative w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-b from-[#180d33] to-[#0a0418]">
                     <img
-                      src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80"
+                      src="/assets/bts_group.jpg"
                       alt="BTS Memories Preview"
-                      className="absolute inset-0 w-full h-full object-cover opacity-25"
+                      className="absolute inset-0 w-full h-full object-cover opacity-35"
                     />
                     <div className="relative z-10 space-y-3">
                       <button
                         onClick={togglePlay}
-                        className="w-16 h-16 rounded-full bg-purple-600/70 border border-purple-300 flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(168,85,247,0.8)] hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-purple-300"
+                        className="w-16 h-16 rounded-full bg-purple-600/80 border border-purple-300 flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(168,85,247,0.8)] hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-purple-300"
                         aria-label="Start 5-minute memory film"
                       >
                         <Play className="w-8 h-8 text-white fill-current ml-1" />
@@ -144,20 +89,20 @@ export default function MemoryRoom() {
                         BTS: 10 Years of Beautiful Moments
                       </h4>
                       <p className="text-xs sm:text-sm text-purple-300 font-montserrat max-w-sm mx-auto">
-                        A 5-minute film chronicling debut, HYYH, Wembley, UN General Assembly, and the 2026 promise.
+                        A retrospective spanning debut, HYYH, Wembley, UN General Assembly, and the 2026 promise.
                       </p>
                     </div>
                   </div>
                 )}
 
                 {/* TV Video Controller Bar */}
-                <div className="absolute bottom-0 inset-x-0 bg-black/80 backdrop-blur-md px-4 py-2.5 flex items-center justify-between border-t border-purple-800/40 z-30">
+                <div className="bg-black/90 px-4 py-2.5 flex items-center justify-between border-t border-purple-800/40 z-30">
                   <div className="flex items-center space-x-3">
                     <button
                       onClick={togglePlay}
                       className="p-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white transition-colors focus:outline-none focus:ring-1 focus:ring-purple-400"
-                      title={isPlayingVideo ? "Pause" : "Play"}
-                      aria-label={isPlayingVideo ? "Pause film" : "Play film"}
+                      title={isPlayingVideo ? "Stop" : "Play"}
+                      aria-label={isPlayingVideo ? "Stop film" : "Play film"}
                     >
                       {isPlayingVideo ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-current" />}
                     </button>
@@ -187,19 +132,7 @@ export default function MemoryRoom() {
                     </button>
 
                     <div className="flex items-center space-x-1.5 text-xs font-mono text-purple-300">
-                      <span>{formatTime(progressSeconds)}</span>
-                      <span>/</span>
-                      <span>5:00</span>
-                    </div>
-                  </div>
-
-                  {/* Scrubber Progress Bar */}
-                  <div className="flex-1 mx-4 hidden sm:block">
-                    <div className="w-full h-1.5 bg-purple-950 rounded-full overflow-hidden border border-purple-800">
-                      <div
-                        className="h-full bg-gradient-to-r from-purple-500 to-pink-400 transition-all duration-300"
-                        style={{ width: `${(progressSeconds / 300) * 100}%` }}
-                      />
+                      <span>{currentChapter.timestamp}</span>
                     </div>
                   </div>
 
@@ -242,7 +175,7 @@ export default function MemoryRoom() {
             </div>
           </div>
 
-          {/* 2. BTS MEMBERS GATHERED ON THE SOFA (Col 8-12) */}
+          {/* 2. BTS MEMBERS GATHERED (Col 8-12) */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center">
             <div className="relative w-full max-w-md rounded-3xl overflow-hidden border border-purple-700/40 bg-[#160a2c]/80 p-5 shadow-2xl backdrop-blur-md">
               <div className="flex items-center justify-between border-b border-purple-800/60 pb-3 mb-4">
@@ -257,16 +190,16 @@ export default function MemoryRoom() {
                 </span>
               </div>
 
-              {/* Members on Sofa Portrait representation */}
+              {/* Authentic BTS Group Photo in the Living Room */}
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-purple-500/30 bg-black">
                 <img
-                  src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80"
-                  alt="BTS Seated Together on Sofa"
+                  src="/assets/bts_group.jpg"
+                  alt="BTS Seated Together"
                   className="w-full h-full object-cover filter saturate-[1.1] contrast-[1.05]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0e0720] via-transparent to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0e0720] via-transparent to-transparent opacity-75" />
 
-                <div className="absolute bottom-3 inset-x-3 p-2.5 rounded-xl bg-black/70 border border-purple-500/30 backdrop-blur-md text-center">
+                <div className="absolute bottom-3 inset-x-3 p-2.5 rounded-xl bg-black/75 border border-purple-500/30 backdrop-blur-md text-center">
                   <p className="font-cinzel text-xs font-bold text-purple-200">
                     RM • JIN • SUGA • J-HOPE • JIMIN • V • JUNG KOOK
                   </p>
@@ -284,6 +217,9 @@ export default function MemoryRoom() {
                 </div>
                 <p className="text-xs sm:text-sm text-purple-200/90 font-montserrat leading-relaxed">
                   {currentChapter.description}
+                </p>
+                <p className="font-cormorant italic text-xs text-purple-300 mt-2 border-l border-purple-500 pl-2">
+                  "{currentChapter.quote}"
                 </p>
               </div>
             </div>

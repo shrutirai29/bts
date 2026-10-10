@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, ListMusic, Sparkles, X, FileText, Music } from 'lucide-react';
-import { softSongPlaylist } from '../data/playlist';
-import { PlaylistItem } from '../types';
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, ListMusic, ExternalLink, Music, X } from 'lucide-react';
+import { softSongPlaylist, VerifiedPlaylistItem } from '../data/playlist';
 
 interface PersistentAudioPlayerProps {
   isPlaying: boolean;
@@ -25,13 +24,11 @@ export default function PersistentAudioPlayer({
   onVolumeChange
 }: PersistentAudioPlayerProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [showLyrics, setShowLyrics] = useState(false);
-
-  const currentTrack: PlaylistItem = softSongPlaylist[currentTrackIndex] || softSongPlaylist[0];
+  const currentTrack: VerifiedPlaylistItem = softSongPlaylist[currentTrackIndex] || softSongPlaylist[0];
 
   return (
     <>
-      {/* Floating Audio Capsule */}
+      {/* Floating Audio Controller */}
       <div className="fixed bottom-5 right-5 z-40 flex items-center space-x-3">
         <div className="flex items-center space-x-3 px-4 py-2.5 rounded-full bg-[#120726]/90 border border-purple-500/40 shadow-[0_10px_35px_rgba(168,85,247,0.35)] backdrop-blur-xl transition-all duration-300">
           {/* Animated Vinyl Icon */}
@@ -40,7 +37,7 @@ export default function PersistentAudioPlayer({
             className={`w-9 h-9 rounded-full bg-purple-950 border-2 border-purple-400 flex items-center justify-center cursor-pointer shadow-md focus:outline-none focus:ring-2 focus:ring-purple-300 ${
               isPlaying ? 'animate-vinyl-spin' : ''
             }`}
-            aria-label={isPlaying ? "Pause music" : "Play music"}
+            aria-label={isPlaying ? "Pause ambient soundscape" : "Play ambient soundscape"}
           >
             <div className="w-3.5 h-3.5 rounded-full bg-purple-500 flex items-center justify-center">
               <div className="w-1 h-1 rounded-full bg-white" />
@@ -53,7 +50,7 @@ export default function PersistentAudioPlayer({
               {currentTrack.title}
             </span>
             <span className="text-[10px] text-purple-300/80 truncate font-mono">
-              {currentTrack.era.split('(')[0]}
+              Ambient Stems • {currentTrack.era.split('(')[0]}
             </span>
           </div>
 
@@ -87,6 +84,20 @@ export default function PersistentAudioPlayer({
             </button>
           </div>
 
+          {/* Official Streaming Link */}
+          {currentTrack.spotifyUrl && (
+            <a
+              href={currentTrack.spotifyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden lg:flex items-center space-x-1 px-2.5 py-1 rounded-full bg-purple-950/70 border border-purple-600/40 text-[10px] text-purple-200 hover:text-white hover:border-purple-300 transition-colors"
+              title="Listen to official master recording on Spotify"
+            >
+              <span>Spotify</span>
+              <ExternalLink className="w-3 h-3 text-purple-400" />
+            </a>
+          )}
+
           {/* Volume Slider */}
           <div className="hidden md:flex items-center space-x-1.5 pl-2 border-l border-purple-800/60">
             {volume === 0 ? (
@@ -106,18 +117,6 @@ export default function PersistentAudioPlayer({
             />
           </div>
 
-          {/* Lyrics Popover Toggle */}
-          <button
-            onClick={() => setShowLyrics(!showLyrics)}
-            className={`p-1.5 rounded-lg transition-colors focus:outline-none focus:ring-1 focus:ring-purple-400 ${
-              showLyrics ? 'bg-purple-700 text-white' : 'text-purple-300 hover:text-white hover:bg-purple-900/50'
-            }`}
-            title="Lyrics excerpt"
-            aria-label="Toggle lyrics excerpt"
-          >
-            <FileText className="w-4 h-4" />
-          </button>
-
           {/* Playlist Drawer Toggle */}
           <button
             onClick={() => setIsDrawerOpen(!isDrawerOpen)}
@@ -132,36 +131,20 @@ export default function PersistentAudioPlayer({
         </div>
       </div>
 
-      {/* Lyrics Excerpt Card */}
-      {showLyrics && (
-        <div className="fixed bottom-24 right-5 z-40 w-80 p-4 rounded-2xl bg-[#140a2a]/95 border border-purple-500/40 shadow-2xl backdrop-blur-xl animate-fadeIn">
-          <div className="flex items-center justify-between border-b border-purple-800/60 pb-2 mb-2">
-            <span className="text-xs font-mono text-purple-300 flex items-center space-x-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-              <span>{currentTrack.title}</span>
-            </span>
-            <button onClick={() => setShowLyrics(false)} className="text-purple-400 hover:text-white" aria-label="Close lyrics">
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-          <p className="font-cormorant italic text-sm text-purple-100 leading-relaxed">
-            "{currentTrack.lyricsExcerpt}"
-          </p>
-          <p className="text-[10px] text-purple-400 font-montserrat mt-2">
-            {currentTrack.description}
-          </p>
-        </div>
-      )}
-
       {/* Playlist Drawer */}
       {isDrawerOpen && (
-        <div className="fixed bottom-24 right-5 z-40 w-80 sm:w-96 max-h-[420px] p-5 rounded-3xl bg-[#120726]/95 border border-purple-500/40 shadow-2xl backdrop-blur-xl flex flex-col animate-fadeIn">
+        <div className="fixed bottom-24 right-5 z-40 w-80 sm:w-96 max-h-[440px] p-5 rounded-3xl bg-[#120726]/95 border border-purple-500/40 shadow-2xl backdrop-blur-xl flex flex-col animate-fadeIn">
           <div className="flex items-center justify-between border-b border-purple-800/60 pb-3 mb-3">
             <div className="flex items-center space-x-2">
               <Music className="w-4 h-4 text-purple-400" />
-              <h4 className="font-cinzel text-sm font-bold text-white">
-                Soft BTS Playlist
-              </h4>
+              <div>
+                <h4 className="font-cinzel text-sm font-bold text-white">
+                  BTS Soft Songs Playlist
+                </h4>
+                <p className="text-[10px] text-purple-400 font-mono">
+                  Ambient Synthesizer & Verified Links
+                </p>
+              </div>
             </div>
             <button
               onClick={() => setIsDrawerOpen(false)}
@@ -172,7 +155,7 @@ export default function PersistentAudioPlayer({
             </button>
           </div>
 
-          <div className="space-y-1.5 overflow-y-auto pr-1">
+          <div className="space-y-2 overflow-y-auto pr-1">
             {softSongPlaylist.map((track, idx) => {
               const isCurrent = currentTrackIndex === idx;
               return (
@@ -199,9 +182,19 @@ export default function PersistentAudioPlayer({
                     </div>
                   </div>
 
-                  <span className="text-[10px] font-mono text-purple-400 flex-shrink-0 ml-2">
-                    {track.duration}
-                  </span>
+                  <div className="flex items-center space-x-2 flex-shrink-0 ml-2">
+                    <a
+                      href={track.spotifyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="p-1 text-purple-400 hover:text-white"
+                      title="Open on Spotify"
+                      aria-label={`Open ${track.title} on Spotify`}
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
                 </div>
               );
             })}

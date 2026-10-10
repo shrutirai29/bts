@@ -13,13 +13,13 @@ export const members: Member[] = [
     zodiac: "Virgo",
     mbti: "ENFP",
     quote: "No matter who you are, where you're from, your skin colour, gender identity: speak yourself.",
-    biography: "Kim Namjoon (RM) is the founding pillar and leader of BTS. A prolific songwriter and producer with over 220 KOMCA credits, RM's lyrical work bridges modern philosophy, literature, and vulnerable human reflection. He delivered historic addresses at the United Nations General Assembly and the White House, advocating for youth representation and inclusion worldwide.",
+    biography: "Kim Namjoon (RM) is the founding member and leader of BTS. A prolific songwriter and producer with over 220 KOMCA credits, RM's lyricism bridges classical literature, contemporary visual art, and existential reflection. He delivered historic addresses at the United Nations General Assembly and the White House, advocating for youth empowerment and diversity worldwide.",
     color: "#4A7C59",
     accentColor: "#86efac",
     themeGlow: "rgba(74, 124, 89, 0.6)",
     alignment: "left",
-    portraitUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80",
-    fullCutoutUrl: "https://pngimg.com/d/bts_PNG44.png",
+    portraitUrl: "/assets/members/rm.jpg",
+    fullCutoutUrl: "/assets/members/rm.jpg",
     soloAlbums: [
       {
         id: "indigo",
@@ -27,7 +27,7 @@ export const members: Member[] = [
         year: "2022",
         releaseDate: "December 2, 2022",
         cover: "https://upload.wikimedia.org/wikipedia/en/2/23/RM_-_Indigo.png",
-        description: "A documentation of RM's 20s. An eclectic, soulful tapestry featuring Erykah Badu, Anderson .Paak, and Tablo.",
+        description: "A documentation of RM's youth in his late twenties, blending neo-soul, folk, and alternative hip-hop with Erykah Badu, Anderson .Paak, and Tablo.",
         tracks: ["Wild Flower (with youjeen)", "Yun (with Erykah Badu)", "Still Life (with Anderson .Paak)", "All Day (with Tablo)", "Forg_tful", "Closer", "Change pt.2", "Lonely", "Hectic", "No.2"],
         streamingUrl: "https://open.spotify.com/album/2wGinO7VOlaRtWV2DY4XZ5",
         officialMvUrl: "https://www.youtube.com/watch?v=u18be_kRmC0"
@@ -85,8 +85,8 @@ export const members: Member[] = [
     accentColor: "#fbcfe8",
     themeGlow: "rgba(244, 114, 182, 0.6)",
     alignment: "right",
-    portraitUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1000&q=80",
-    fullCutoutUrl: "https://pngimg.com/d/bts_PNG44.png",
+    portraitUrl: "/assets/members/jin.png",
+    fullCutoutUrl: "/assets/members/jin.png",
     soloAlbums: [
       {
         id: "happy",
@@ -94,10 +94,10 @@ export const members: Member[] = [
         year: "2024",
         releaseDate: "November 15, 2024",
         cover: "https://upload.wikimedia.org/wikipedia/en/f/f0/Jin_-_Happy.png",
-        description: "Jin's radiant debut solo album delivering pop-rock warmth, infectious optimism, and deep love for ARMY.",
+        description: "Jin's debut solo album delivering vibrant pop-rock warmth, uplifting energy, and heartfelt connection with fans.",
         tracks: ["Running Wild", "I'll Be There", "Another Level", "Falling", "Heart on the Window (with WENDY)", "I will come to you"],
         streamingUrl: "https://open.spotify.com/artist/540vIaP2JwjQb9dmYAgRJ3",
-        officialMvUrl: "https://www.youtube.com/watch?v=u18be_kRmC0"
+        officialMvUrl: "https://www.youtube.com/watch?v=I9e_b9eJ_Wc"
       },
       {
         id: "the-astronaut",
@@ -105,7 +105,7 @@ export const members: Member[] = [
         year: "2022",
         releaseDate: "October 28, 2022",
         cover: "https://upload.wikimedia.org/wikipedia/en/d/dc/Jin_-_The_Astronaut.png",
-        description: "Co-written with Coldplay, a transcendent cosmic pop-rock journey expressing gratitude to fans.",
+        description: "Co-written with Coldplay, a cosmic pop-rock journey expressing gratitude to ARMY before enlistment.",
         tracks: ["The Astronaut", "The Astronaut (Instrumental)"],
         streamingUrl: "https://open.spotify.com/album/43BqE6UcgR78sP6x7VqU8v",
         officialMvUrl: "https://www.youtube.com/watch?v=c6ASQOwKkhk"
@@ -118,13 +118,14 @@ export const members: Member[] = [
         cover: "https://upload.wikimedia.org/wikipedia/en/4/4b/BTS_-_Love_Yourself_Answer.png",
         description: "Beloved anthems including 'Epiphany', 'Moon', 'Abyss', 'Super Tuna', and 'Yours'.",
         tracks: ["Epiphany", "Moon", "Abyss", "Super Tuna", "Yours (Jirisan OST)", "Tonight"],
-        streamingUrl: "https://open.spotify.com/artist/540vIaP2JwjQb9dmYAgRJ3"
+        streamingUrl: "https://open.spotify.com/artist/540vIaP2JwjQb9dmYAgRJ3",
+        officialMvUrl: "https://www.youtube.com/watch?v=fIkZOLsnoqY"
       }
     ],
     achievements: [
       "Official Torchbearer representing South Korea at the 2024 Paris Summer Olympics",
       "Certified Million-Seller single with 'The Astronaut'",
-      "Guest stadium performer alongside Coldplay in Buenos Aires, Argentina",
+      "Guest stadium performer alongside Coldplay at Estadio River Plate, Buenos Aires",
       "Praised by Grammy recording academy panelists for his wide emotional vocal range"
     ],
     facts: [
@@ -151,8 +152,8 @@ export const members: Member[] = [
     accentColor: "#bae6fd",
     themeGlow: "rgba(56, 189, 248, 0.6)",
     alignment: "left",
-    portraitUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1000&q=80",
-    fullCutoutUrl: "https://pngimg.com/d/bts_PNG44.png",
+    portraitUrl: "/assets/members/suga.jpg",
+    fullCutoutUrl: "/assets/members/suga.jpg",
     soloAlbums: [
       {
         id: "d-day",
@@ -218,8 +219,8 @@ export const members: Member[] = [
     accentColor: "#fde68a",
     themeGlow: "rgba(251, 191, 36, 0.6)",
     alignment: "right",
-    portraitUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=1000&q=80",
-    fullCutoutUrl: "https://pngimg.com/d/bts_PNG44.png",
+    portraitUrl: "/assets/members/jhope.png",
+    fullCutoutUrl: "/assets/members/jhope.png",
     soloAlbums: [
       {
         id: "jack-in-the-box",
@@ -285,8 +286,8 @@ export const members: Member[] = [
     accentColor: "#f472b6",
     themeGlow: "rgba(236, 72, 153, 0.6)",
     alignment: "left",
-    portraitUrl: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=1000&q=80",
-    fullCutoutUrl: "https://pngimg.com/d/bts_PNG44.png",
+    portraitUrl: "/assets/members/jimin.jpg",
+    fullCutoutUrl: "/assets/members/jimin.jpg",
     soloAlbums: [
       {
         id: "face",
@@ -318,7 +319,8 @@ export const members: Member[] = [
         cover: "https://upload.wikimedia.org/wikipedia/en/3/36/BTS_-_Wings.jpg",
         description: "Legendary solo tracks including 'Lie', 'Serendipity', 'Filter', 'Promise', and 'With You'.",
         tracks: ["Lie", "Intro: Serendipity", "Filter", "Promise (약속)", "Christmas Love", "With You (with Ha Sung-woon)"],
-        streamingUrl: "https://open.spotify.com/artist/1oSPZhvZMIrWW5I41kWiF9"
+        streamingUrl: "https://open.spotify.com/artist/1oSPZhvZMIrWW5I41kWiF9",
+        officialMvUrl: "https://www.youtube.com/watch?v=BEMaH9Sm3lQ"
       }
     ],
     achievements: [
@@ -351,8 +353,8 @@ export const members: Member[] = [
     accentColor: "#a5b4fc",
     themeGlow: "rgba(99, 102, 241, 0.6)",
     alignment: "right",
-    portraitUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=1000&q=80",
-    fullCutoutUrl: "https://pngimg.com/d/bts_PNG44.png",
+    portraitUrl: "/assets/members/v.jpg",
+    fullCutoutUrl: "/assets/members/v.jpg",
     soloAlbums: [
       {
         id: "layover",
@@ -417,8 +419,8 @@ export const members: Member[] = [
     accentColor: "#d8b4fe",
     themeGlow: "rgba(168, 85, 247, 0.6)",
     alignment: "left",
-    portraitUrl: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1000&q=80",
-    fullCutoutUrl: "https://pngimg.com/d/bts_PNG44.png",
+    portraitUrl: "/assets/members/jungkook.png",
+    fullCutoutUrl: "/assets/members/jungkook.png",
     soloAlbums: [
       {
         id: "golden",
@@ -450,7 +452,8 @@ export const members: Member[] = [
         cover: "https://upload.wikimedia.org/wikipedia/en/2/21/BTS_-_Map_of_the_Soul_7.png",
         description: "Vocal showcase tracks from BTS albums including 'Begin', 'Euphoria', and 'My Time'.",
         tracks: ["Begin (Wings)", "Euphoria (Love Yourself: Answer)", "My Time (Map of the Soul: 7)", "Decalcomania", "10,000 Hours (Cover)"],
-        streamingUrl: "https://open.spotify.com/artist/6dhug7iN6qB2o0s11bYkU9"
+        streamingUrl: "https://open.spotify.com/artist/6dhug7iN6qB2o0s11bYkU9",
+        officialMvUrl: "https://www.youtube.com/watch?v=kX0vO4vlJuU"
       }
     ],
     achievements: [

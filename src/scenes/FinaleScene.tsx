@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sparkles, Heart, RefreshCw, Send, MessageCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { members } from '../data/members';
 import { GuestbookMessage } from '../types';
 
 interface FinaleSceneProps {
@@ -8,15 +9,22 @@ interface FinaleSceneProps {
 }
 
 export default function FinaleScene({ onReplayJourney }: FinaleSceneProps) {
-  const [messages, setMessages] = useState<GuestbookMessage[]>([
-    { id: 1, author: "Seoul ARMY", text: "Thank you for walking with us through our youth. Seven forever 💜", timestamp: "Just now", favoriteSong: "Spring Day" },
-    { id: 2, author: "Maria (London)", text: "Wembley Young Forever singalong will stay in my heart forever. Apobangpo!", timestamp: "2m ago", favoriteSong: "Mikrokosmos" },
-    { id: 3, author: "Aarav (Mumbai)", text: "Zero O'Clock healed me during my toughest days. Borahae BTS!", timestamp: "6m ago", favoriteSong: "00:00" },
-    { id: 4, author: "Chloe (New York)", text: "Seven solo masterworks and counting. Can't wait for 2025/2026!", timestamp: "14m ago", favoriteSong: "Life Goes On" }
-  ]);
+  const [messages, setMessages] = useState<GuestbookMessage[]>([]);
   const [newAuthor, setNewAuthor] = useState("");
   const [newText, setNewText] = useState("");
   const [newSong, setNewSong] = useState("");
+
+  // Load genuine local messages from localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('bts_guestbook_messages');
+      if (stored) {
+        setMessages(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.warn("Could not load local guestbook", e);
+    }
+  }, []);
 
   const triggerPurpleConfetti = () => {
     confetti({
@@ -33,26 +41,43 @@ export default function FinaleScene({ onReplayJourney }: FinaleSceneProps) {
 
     const newMsg: GuestbookMessage = {
       id: Date.now(),
-      author: newAuthor.trim() || "Anonymous ARMY",
+      author: newAuthor.trim() || "ARMY",
       text: newText.trim(),
-      timestamp: "Just now",
+      timestamp: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
       favoriteSong: newSong.trim() || undefined
     };
 
-    setMessages([newMsg, ...messages]);
+    const updated = [newMsg, ...messages];
+    setMessages(updated);
+    try {
+      localStorage.setItem('bts_guestbook_messages', JSON.stringify(updated));
+    } catch (e) {
+      console.warn("Could not save to localStorage", e);
+    }
+
     setNewText("");
     setNewAuthor("");
     setNewSong("");
     triggerPurpleConfetti();
   };
 
+  const stageMembers = [
+    members.find(m => m.id === 'jhope')!,
+    members.find(m => m.id === 'jin')!,
+    members.find(m => m.id === 'suga')!,
+    members.find(m => m.id === 'rm')!,
+    members.find(m => m.id === 'jimin')!,
+    members.find(m => m.id === 'v')!,
+    members.find(m => m.id === 'jungkook')!,
+  ].filter(Boolean);
+
   return (
     <section id="final-goodbye" className="relative min-h-screen py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center justify-center">
       {/* Ambient Floor Glow */}
       <div className="absolute inset-x-0 bottom-0 top-1/3 bg-gradient-to-t from-purple-700/20 via-purple-900/10 to-transparent blur-3xl pointer-events-none" />
 
-      {/* Reunited 7 Members Spotlight Stage */}
-      <div className="relative z-10 w-full max-w-4xl text-center mb-12">
+      {/* Reunited 7 Members Spotlight Stage (Same authentic portraits as the opening) */}
+      <div className="relative z-10 w-full max-w-5xl text-center mb-12">
         <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 mb-4 backdrop-blur-md">
           <Sparkles className="w-3.5 h-3.5 text-purple-300" />
           <span className="text-xs font-montserrat uppercase tracking-[0.25em] text-purple-200">
@@ -60,21 +85,47 @@ export default function FinaleScene({ onReplayJourney }: FinaleSceneProps) {
           </span>
         </div>
 
-        {/* 7 Members Spotlight Artwork */}
-        <div className="relative my-8 rounded-3xl overflow-hidden border-2 border-purple-500/40 bg-gradient-to-b from-[#1c0f38] to-[#0b0518] p-4 shadow-[0_0_60px_rgba(168,85,247,0.4)]">
-          <div className="relative aspect-[16/7] rounded-2xl overflow-hidden bg-black">
-            <img
-              src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80"
-              alt="BTS Reunited on Stage"
-              className="w-full h-full object-cover filter saturate-[1.1] contrast-[1.05]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0e0720] via-purple-950/20 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0e0720] to-transparent" />
+        {/* 7 Members Stage Lineup */}
+        <div className="relative my-8 py-6 rounded-3xl border border-purple-500/40 bg-gradient-to-b from-[#1c0f38]/90 to-[#0b0518]/90 shadow-[0_0_60px_rgba(168,85,247,0.35)] overflow-hidden">
+          <div className="flex items-end justify-center -space-x-3 sm:-space-x-6 md:-space-x-8 px-4">
+            {stageMembers.map((member) => (
+              <div key={member.id} className="relative flex flex-col items-center">
+                {/* Converging Spotlight Column */}
+                <div
+                  className="absolute -top-20 bottom-0 w-20 sm:w-28 rounded-full opacity-35 blur-lg pointer-events-none"
+                  style={{
+                    background: `radial-gradient(ellipse at bottom, ${member.themeGlow} 0%, transparent 80%)`,
+                  }}
+                />
+
+                <div className="relative w-20 sm:w-32 md:w-36 aspect-[3/5]">
+                  <img
+                    src={member.portraitUrl}
+                    alt={`${member.name} (${member.realName})`}
+                    className="w-full h-full object-cover object-top filter saturate-[1.05] contrast-[1.05]"
+                    style={{
+                      maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
+                      WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
+                    }}
+                  />
+                </div>
+
+                <div
+                  className="w-12 sm:w-20 h-2 rounded-full blur-[2px] mt-1"
+                  style={{
+                    backgroundColor: member.accentColor,
+                    opacity: 0.5,
+                  }}
+                />
+
+                <span className="font-cinzel text-[11px] font-bold text-purple-200 mt-1">
+                  {member.name}
+                </span>
+              </div>
+            ))}
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs font-mono text-purple-300">
-            <span>RM</span> • <span>JIN</span> • <span>SUGA</span> • <span>J-HOPE</span> • <span>JIMIN</span> • <span>V</span> • <span>JUNG KOOK</span>
-          </div>
+          <div className="w-full h-4 bg-gradient-to-b from-purple-500/20 to-transparent blur-sm mt-1" />
         </div>
 
         {/* Emotional Typography */}
@@ -118,7 +169,7 @@ export default function FinaleScene({ onReplayJourney }: FinaleSceneProps) {
         </div>
       </div>
 
-      {/* Borahae Fan Guestbook Wall */}
+      {/* Real Interactive Borahae Fan Guestbook (LocalStorage based, no fabricated entries) */}
       <div className="w-full max-w-4xl mt-12 p-6 sm:p-8 rounded-3xl border border-purple-800/40 bg-[#120726]/90 backdrop-blur-xl shadow-2xl">
         <div className="flex items-center space-x-3 mb-6">
           <MessageCircle className="w-5 h-5 text-pink-400" />
@@ -127,7 +178,7 @@ export default function FinaleScene({ onReplayJourney }: FinaleSceneProps) {
               Borahae Fan Wall (보라해 방명록)
             </h3>
             <p className="text-xs text-purple-300 font-montserrat">
-              Leave your personal tribute or message of love for BTS.
+              Leave your personal note for BTS. Messages are stored locally on your device.
             </p>
           </div>
         </div>
@@ -151,7 +202,7 @@ export default function FinaleScene({ onReplayJourney }: FinaleSceneProps) {
             />
             <input
               type="text"
-              placeholder="Message to BTS..."
+              placeholder="Your message to BTS..."
               value={newText}
               onChange={(e) => setNewText(e.target.value)}
               className="sm:col-span-1 px-4 py-2.5 rounded-xl bg-purple-950/60 border border-purple-700/50 text-xs text-white placeholder-purple-400/60 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400"
@@ -163,44 +214,49 @@ export default function FinaleScene({ onReplayJourney }: FinaleSceneProps) {
               className="flex items-center space-x-2 px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all focus:outline-none focus:ring-2 focus:ring-purple-300"
             >
               <Send className="w-3.5 h-3.5" />
-              <span>Post Message to Constellation</span>
+              <span>Post Message</span>
             </button>
           </div>
         </form>
 
-        {/* Live Messages Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-h-[300px] overflow-y-auto pr-1">
-          {messages.map((msg) => (
-            <div
-              key={msg.id}
-              className="p-4 rounded-2xl bg-purple-950/40 border border-purple-800/40 flex flex-col justify-between"
-            >
-              <p className="text-xs sm:text-sm text-purple-100 font-montserrat italic">
-                "{msg.text}"
-              </p>
-              <div className="flex items-center justify-between mt-3 pt-2 border-t border-purple-900/40">
-                <div className="flex items-center space-x-2">
-                  <span className="text-xs font-cinzel font-bold text-pink-300">
-                    {msg.author}
-                  </span>
-                  {msg.favoriteSong && (
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-900/60 text-purple-300">
-                      🎵 {msg.favoriteSong}
+        {/* Real Messages List */}
+        {messages.length === 0 ? (
+          <div className="py-8 text-center text-purple-400/70 text-xs font-montserrat italic border border-purple-900/40 rounded-2xl">
+            No notes on this device yet. Write the first note for the Borahae Wall above! 💜
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-h-[300px] overflow-y-auto pr-1">
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className="p-4 rounded-2xl bg-purple-950/40 border border-purple-800/40 flex flex-col justify-between"
+              >
+                <p className="text-xs sm:text-sm text-purple-100 font-montserrat italic">
+                  "{msg.text}"
+                </p>
+                <div className="flex items-center justify-between mt-3 pt-2 border-t border-purple-900/40">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs font-cinzel font-bold text-pink-300">
+                      {msg.author}
                     </span>
-                  )}
+                    {msg.favoriteSong && (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-900/60 text-purple-300">
+                        🎵 {msg.favoriteSong}
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] font-mono text-purple-400">
+                    {msg.timestamp}
+                  </span>
                 </div>
-                <span className="text-[10px] font-mono text-purple-400">
-                  {msg.timestamp}
-                </span>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Footer */}
       <footer className="mt-16 text-center text-xs font-mono text-purple-500/80">
-        <p>BTS: A Journey Through Forever • Created with 💜 for BTS and ARMY worldwide.</p>
+        <p>BTS: A Journey Through Forever • Dedicated to BTS & ARMY worldwide.</p>
       </footer>
     </section>
   );

@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, Disc, Award, Info, Quote, ExternalLink, Play } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { members } from '../data/members';
 import { Member, SoloAlbum } from '../types';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface MemberChoreographyProps {
   onPlaySong?: (songName: string) => void;
 }
 
 export default function MemberChoreography({ onPlaySong }: MemberChoreographyProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const [activeTabs, setActiveTabs] = useState<Record<string, 'albums' | 'achievements' | 'trivia'>>({
     rm: 'albums',
     jin: 'albums',
@@ -28,6 +36,67 @@ export default function MemberChoreography({ onPlaySong }: MemberChoreographyPro
     jungkook: 0,
   });
 
+  // Setup GSAP ScrollTrigger timeline animations for each member chapter
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      members.forEach((member) => {
+        const sectionId = `#member-chapter-${member.id}`;
+        const portraitEl = document.querySelector(`${sectionId} .member-portrait`);
+        const contentEl = document.querySelector(`${sectionId} .member-content`);
+
+        if (portraitEl && contentEl) {
+          const isLeft = member.alignment === 'left';
+
+          gsap.fromTo(
+            portraitEl,
+            {
+              opacity: 0.2,
+              scale: 0.9,
+              x: isLeft ? -40 : 40,
+            },
+            {
+              opacity: 1,
+              scale: 1.05,
+              x: 0,
+              duration: 1.2,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: sectionId,
+                start: 'top 75%',
+                end: 'top 25%',
+                scrub: 1,
+              },
+            }
+          );
+
+          gsap.fromTo(
+            contentEl,
+            {
+              opacity: 0,
+              y: 40,
+            },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: sectionId,
+                start: 'top 70%',
+                end: 'top 30%',
+                scrub: 1,
+              },
+            }
+          );
+        }
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const handleTabChange = (memberId: string, tab: 'albums' | 'achievements' | 'trivia') => {
     setActiveTabs((prev) => ({ ...prev, [memberId]: tab }));
   };
@@ -37,7 +106,7 @@ export default function MemberChoreography({ onPlaySong }: MemberChoreographyPro
   };
 
   return (
-    <div id="members-journey" className="relative w-full">
+    <div ref={containerRef} id="members-journey" className="relative w-full">
       {/* Chapter Section Introduction Header */}
       <div className="py-20 text-center px-4 max-w-4xl mx-auto">
         <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-purple-900/30 border border-purple-500/30 mb-3 backdrop-blur-md">
@@ -85,7 +154,7 @@ export default function MemberChoreography({ onPlaySong }: MemberChoreographyPro
               >
                 {/* 1. Member Portrait & Stage Spotlight Frame */}
                 <div
-                  className={`lg:col-span-5 flex flex-col items-center justify-center ${
+                  className={`lg:col-span-5 flex flex-col items-center justify-center member-portrait ${
                     isLeft ? 'lg:order-1' : 'lg:order-2'
                   }`}
                 >
@@ -111,12 +180,13 @@ export default function MemberChoreography({ onPlaySong }: MemberChoreographyPro
                         {member.zodiac} • {member.mbti}
                       </div>
 
-                      {/* Full-Length Member Portrait */}
+                      {/* Authentic Member Portrait */}
                       <div className="relative aspect-[3/4] overflow-hidden">
                         <img
                           src={member.portraitUrl}
-                          alt={member.name}
-                          className="w-full h-full object-cover object-top filter saturate-[1.05] contrast-[1.05] group-hover:scale-105 transition-transform duration-700"
+                          alt={`${member.name} (${member.realName})`}
+                          className="w-full h-full object-cover object-top filter saturate-[1.05] contrast-[1.05] transition-transform duration-700 group-hover:scale-105"
+                          loading="lazy"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0e0720] via-transparent to-transparent opacity-80" />
                       </div>
@@ -147,7 +217,7 @@ export default function MemberChoreography({ onPlaySong }: MemberChoreographyPro
 
                 {/* 2. Member Biography, Solo Discography, and Achievements */}
                 <div
-                  className={`lg:col-span-7 flex flex-col justify-center ${
+                  className={`lg:col-span-7 flex flex-col justify-center member-content ${
                     isLeft ? 'lg:order-2' : 'lg:order-1'
                   }`}
                 >
@@ -266,17 +336,31 @@ export default function MemberChoreography({ onPlaySong }: MemberChoreographyPro
                                     </span>
                                   </h4>
 
-                                  {currentSoloAlbum.streamingUrl && (
-                                    <a
-                                      href={currentSoloAlbum.streamingUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="flex items-center space-x-1 text-xs text-purple-300 hover:text-white"
-                                    >
-                                      <span>Spotify</span>
-                                      <ExternalLink className="w-3 h-3" />
-                                    </a>
-                                  )}
+                                  <div className="flex items-center space-x-2">
+                                    {currentSoloAlbum.officialMvUrl && (
+                                      <a
+                                        href={currentSoloAlbum.officialMvUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-purple-950/80 border border-purple-600/50 text-xs text-purple-300 hover:text-white"
+                                      >
+                                        <span>Official MV</span>
+                                        <ExternalLink className="w-3 h-3" />
+                                      </a>
+                                    )}
+
+                                    {currentSoloAlbum.streamingUrl && (
+                                      <a
+                                        href={currentSoloAlbum.streamingUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-purple-950/80 border border-purple-600/50 text-xs text-purple-300 hover:text-white"
+                                      >
+                                        <span>Spotify</span>
+                                        <ExternalLink className="w-3 h-3" />
+                                      </a>
+                                    )}
+                                  </div>
                                 </div>
                                 <p className="text-xs text-purple-300/80 font-montserrat mt-1">
                                   {currentSoloAlbum.description}
