@@ -1,0 +1,119 @@
+/* Custom scrollbar & luxury BTS styling */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+:root {
+  --bts-purple-glow: rgba(168, 85, 247, 0.6);
+  --bts-gold-glow: rgba(246, 224, 94, 0.4);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #080314;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7c3aed, #c084fc, #3b0764);
+  border-radius: 9999px;
+  border: 2px solid #080314;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #9333ea, #e879f9, #581c87);
+}
+
+/* Glow effects */
+.glow-purple {
+  filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.6));
+}
+
+.glow-purple-lg {
+  box-shadow: 0 0 50px -10px rgba(168, 85, 247, 0.5);
+}
+
+.glow-gold {
+  filter: drop-shadow(0 0 15px rgba(246, 224, 94, 0.5));
+}
+
+.neon-text-purple {
+  text-shadow: 0 0 10px rgba(192, 132, 252, 0.8),
+               0 0 20px rgba(168, 85, 247, 0.6),
+               0 0 40px rgba(147, 51, 234, 0.4);
+}
+
+.neon-border {
+  border: 1px solid rgba(192, 132, 252, 0.4);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.2), inset 0 0 15px rgba(168, 85, 247, 0.1);
+}
+
+.glass-panel {
+  background: rgba(18, 10, 36, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-panel-hover:hover {
+  background: rgba(28, 16, 56, 0.85);
+  border-color: rgba(216, 180, 254, 0.4);
+  box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.3);
+  transform: translateY(-4px);
+}
+
+/* 3D Vinyl animation */
+@keyframes spinDisc {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-vinyl-spin {
+  animation: spinDisc 2.5s linear infinite;
+}
+
+/* Spotlights */
+.spotlight-cone {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(216, 180, 254, 0.35) 0%,
+    rgba(147, 51, 234, 0.15) 45%,
+    rgba(88, 28, 135, 0.05) 75%,
+    transparent 100%
+  );
+  clip-path: polygon(42% 0%, 58% 0%, 100% 100%, 0% 100%);
+}
+
+.spotlight-cone-active {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(243, 232, 255, 0.6) 0%,
+    rgba(192, 132, 252, 0.35) 45%,
+    rgba(147, 51, 234, 0.15) 75%,
+    transparent 100%
+  );
+  clip-path: polygon(38% 0%, 62% 0%, 100% 100%, 0% 100%);
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.text-shimmer {
+  background: linear-gradient(90deg, #e9d5ff 0%, #ffffff 50%, #c084fc 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* Font classes */
+.font-cursive {
+  font-family: 'Great Vibes', cursive;
+}
