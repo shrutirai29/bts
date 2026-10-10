@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import ThreeStageCanvas from './components/ThreeStageCanvas';
-import Navigation from './components/Navigation';
-import HeroStage from './scenes/HeroStage';
-import MemberChoreography from './scenes/MemberChoreography';
-import AlbumJourney from './scenes/AlbumJourney';
-import MemoryRoom from './scenes/MemoryRoom';
-import ResourceGallery from './scenes/ResourceGallery';
-import FinaleScene from './scenes/FinaleScene';
-import PersistentAudioPlayer from './components/PersistentAudioPlayer';
-import CustomCursor from './components/CustomCursor';
-import { softSongPlaylist } from './data/playlist';
-import { soundEngine } from './utils/audioEngine';
+import ThreeStageCanvas from './components/ThreeStageCanvas.tsx';
+import Navigation from './components/Navigation.tsx';
+import HeroStage from './scenes/HeroStage.tsx';
+import MemberChoreography from './scenes/MemberChoreography.tsx';
+import AlbumJourney from './scenes/AlbumJourney.tsx';
+import MemoryRoom from './scenes/MemoryRoom.tsx';
+import ResourceGallery from './scenes/ResourceGallery.tsx';
+import FinaleScene from './scenes/FinaleScene.tsx';
+import PersistentAudioPlayer from './components/PersistentAudioPlayer.tsx';
+import CustomCursor from './components/CustomCursor.tsx';
+import { softSongPlaylist } from './data/playlist.ts';
+import { soundEngine } from './utils/audioEngine.ts';
 
 export default function App() {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
@@ -28,7 +28,7 @@ export default function App() {
     };
   }, []);
 
-  // Listen for first user scroll to initiate soft soundtrack
+  // Listen for first user scroll or click to initiate soft soundtrack
   useEffect(() => {
     let hasTriggered = false;
 
